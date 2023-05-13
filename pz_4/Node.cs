@@ -4,29 +4,99 @@ using System.Text;
 
 namespace pz_4
 {
-    internal class Node
+    public class Node
     {
-        public class DTreeNode // Класс «Узел дихотомического дерева»
+        public int Value { get; }
+        public Node Left { get; set; }
+        public Node Right { get; set; }
+
+        public Node(int value)
         {
-            private char info; // информационное поле
-            private int key; // поле ключа
-            private DTreeNode left; // ссылка на левое поддерево
-            private DTreeNode right; // ссылка на правое поддерево
-            public char Info { get; set; } // свойства
-            public int Key { get; set; }
-            public DTreeNode Left { get; set; }
-            public DTreeNode Right { get; set; }
-            public DTreeNode() { } // конструкторы
-            public DTreeNode(char info, int key)
+            Value = value;
+        }
+
+        public void Insert(int value)
+        {
+            if (value < Value)
             {
-                Info = info; Key = key;
+                if (Left == null)
+                {
+                    Left = new Node(value);
+                }
+                else
+                {
+                    Left.Insert(value);
+                }
+            }
+            else if (value > Value)
+            {
+                if (Right == null)
+                {
+                    Right = new Node(value);
+                }
+                else
+                {
+                    Right.Insert(value);
+                }
+            }
+        }
+
+        public int Sum()
+        {
+            int sum = Value;
+
+            if (Left != null)
+            {
+                sum += Left.Sum();
             }
 
-
-            public DTreeNode(char info, int key, DTreeNode left, DTreeNode right)
+            if (Right != null)
             {
-                Info = info; Key = key; Left = left; Right = right;
+                sum += Right.Sum();
+            }
+
+            return sum;
+        }
+
+        public int CountInternalNodes()
+        {
+            int count = 0;
+
+            if (Left != null || Right != null)
+            {
+                count++; // текущий узел - внутренний
+            }
+
+            if (Left != null)
+            {
+                count += Left.CountInternalNodes();
+            }
+
+            if (Right != null)
+            {
+                count += Right.CountInternalNodes();
+            }
+
+            return count;
+        }
+
+        public void CopyNegativeValuesTo(List<int> list)
+        {
+            if (Value < 0)
+            {
+                list.Add(Value);
+            }
+
+            if (Left != null)
+            {
+                Left.CopyNegativeValuesTo(list);
+            }
+
+            if (Right != null)
+            {
+                Right.CopyNegativeValuesTo(list);
             }
         }
     }
 }
+
